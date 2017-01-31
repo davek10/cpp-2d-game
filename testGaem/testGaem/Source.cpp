@@ -5,7 +5,7 @@ int main() {
 	sf::CircleShape shape;
 	shape.setRadius(40.f);
 	shape.setPosition(100.f, 100.f);
-	shape.setFillColor(sf::Color::Red);
+	shape.setFillColor(sf::Color::Transparent);
 
 	while (window.isOpen()) {
 
