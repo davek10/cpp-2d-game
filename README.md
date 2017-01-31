@@ -2,4 +2,4 @@
 ### Chosen attributes for project:
 #### 2D Game
 #### Top view
-#### Small map, different areas maybe
+#### Small tilebased map, different areas maybe???..:.
