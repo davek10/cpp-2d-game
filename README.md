@@ -12,7 +12,7 @@
 ### More Basic
 * Movement system for player (WASD)
 * Camera System following player (Static camera on small areas)
-+ Could be implemented in many ways, up for discussion
+1. Could be implemented in many ways, up for discussion
 ### More Complex
 * Multiplayer networking
 * Item / Inventory System
