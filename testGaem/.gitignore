@@ -3,8 +3,8 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
-testGaem.sln
-testGaem.vcxproj
+#testGaem.sln
+#testGaem.vcxproj
 
 # User-specific files
 *.suo
