@@ -63,7 +63,6 @@ int main() {
 
 		window.clear();
 		window.draw(shape);
-		window.draw(triangle);
 		window.display();
 	}
 
