@@ -3,9 +3,15 @@
 #include <stdlib.h>
 #include <io.h>
 using namespace std;
+
+int windowWidth = 640;
+int windowHeight = 480;
+
 int main() {
 
-	sf::RenderWindow window(sf::VideoMode(640, 480), "SFML Application");
+	sf::RenderWindow window(sf::VideoMode(windowWidth, windowHeight), "SFML Application");
+	
+	// Could be moved to a movement class once threads are read up on.
 	sf::CircleShape shape;
 	shape.setRadius(40.f);
 	shape.setPosition(100.f, 100.f);
@@ -36,7 +42,7 @@ int main() {
 		{
 			sf::Vector2f pos = shape.getPosition();
 			float newX = pos.x;
-			if (pos.x + step <= (640.0-shape.getRadius()*2)) {
+			if (pos.x + step <= ((float)windowWidth - shape.getRadius()*2)) {
 				newX = newX + step;
 			}
 			shape.setPosition(newX, pos.y);
@@ -57,7 +63,7 @@ int main() {
 			// left key is pressed: move our character
 			sf::Vector2f pos = shape.getPosition();
 			float newY = pos.y;
-			if (pos.y + step <= (480-shape.getRadius()*2)) {
+			if (pos.y + step <= ((float)windowHeight - shape.getRadius()*2)) {
 				newY = newY + step;
 			}
 			shape.setPosition(pos.x, newY);
