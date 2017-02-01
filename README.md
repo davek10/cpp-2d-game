@@ -8,6 +8,7 @@
 
 ## Things to decide on
 * Singleplayer / Multiplayer
+
 ## Ideas for implementation
 ### More Basic
 * Movement system for player (WASD)
