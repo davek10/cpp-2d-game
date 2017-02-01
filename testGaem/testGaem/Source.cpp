@@ -10,6 +10,8 @@ int main() {
 	shape.setRadius(40.f);
 	shape.setPosition(100.f, 100.f);
 	shape.setFillColor(sf::Color::Red);
+	float step = 0.05;
+
 
 	while (window.isOpen()) {
 
@@ -24,8 +26,8 @@ int main() {
 		{
 			sf::Vector2f pos = shape.getPosition();
 			float newX = pos.x;
-			if (pos.x - 1 >= 0) {
-				newX--;
+			if (pos.x - step >= 0) {
+				newX = newX - step;
 			}
 			shape.setPosition(newX, pos.y);
 		}
@@ -34,8 +36,8 @@ int main() {
 		{
 			sf::Vector2f pos = shape.getPosition();
 			float newX = pos.x;
-			if (pos.x + 1.0 <= (640.0-shape.getRadius()*2)) {
-				newX++;
+			if (pos.x + step <= (640.0-shape.getRadius()*2)) {
+				newX = newX + step;
 			}
 			shape.setPosition(newX, pos.y);
 		}
@@ -44,8 +46,8 @@ int main() {
 		{
 			sf::Vector2f pos = shape.getPosition();
 			float newY = pos.y;
-			if (pos.y - 1 >= 0) {
-				newY--;
+			if (pos.y - step >= 0) {
+				newY = newY - step;
 			}
 			shape.setPosition(pos.x, newY);
 		}
@@ -55,8 +57,8 @@ int main() {
 			// left key is pressed: move our character
 			sf::Vector2f pos = shape.getPosition();
 			float newY = pos.y;
-			if (pos.y + 1 <= (480-shape.getRadius()*2)) {
-				newY++;
+			if (pos.y + step <= (480-shape.getRadius()*2)) {
+				newY = newY + step;
 			}
 			shape.setPosition(pos.x, newY);
 		}
