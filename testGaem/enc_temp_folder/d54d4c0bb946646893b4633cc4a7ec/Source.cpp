@@ -17,7 +17,6 @@ void newCirclePos(sf::CircleShape shape) {
 }
 
 float stepCalcPos(float currentPosition, float goal, float step) {
-	step = step * 2;
 	if (currentPosition < goal) {
 		if ((currentPosition + step) > goal) {
 			return goal;
