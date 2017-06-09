@@ -11,6 +11,11 @@ sf::CircleShape shape2;
 float xBallPos;
 float yBallPos;
 
+sf::Text text;
+sf::Font font;
+sf::String hitText = "Hits: ";
+int hits = 0;
+
 void newCirclePos(sf::CircleShape shape) {
 	xBallPos = rand() % (int)(windowWidth - ceil(shape.getRadius()*2));
 	yBallPos = rand() % (int)(windowHeight - ceil(shape.getRadius()*2));
@@ -44,15 +49,24 @@ int main() {
 	sf::RenderWindow window(sf::VideoMode(windowWidth, windowHeight), "SFML Application");
 
 	// Could be moved to a movement class once threads are read up on.
-	shape.setRadius(40.f);
+	shape.setRadius(25.f);
 	shape.setPosition(100.f, 100.f);
 	shape.setFillColor(sf::Color::Red);
 	shape2.setRadius(10.f);
 	shape.setPosition(200.f, 200.f);
 	shape.setFillColor(sf::Color::Blue);
 	float step = 0.05;
-
 	newCirclePos(shape2);
+
+	if (!font.loadFromFile("badabb.ttf"))
+	{
+		std::printf("memes");
+		// error
+	}
+
+	text.setString("Hits: 0");
+	text.setFillColor(sf::Color::Green);
+	text.setFont(font);
 
 	while (window.isOpen()) {
 
@@ -62,6 +76,7 @@ int main() {
 				window.close();
 		}
 
+		// Keypresses
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 		{
 			sf::Vector2f pos = shape.getPosition();
@@ -106,15 +121,28 @@ int main() {
 			shape.setPosition(pos.x, newY);
 		}
 
+		// Movement for small ball
 		shape2.setPosition(stepCalcPos(shape2.getPosition().x, xBallPos, step), stepCalcPos(shape2.getPosition().y, yBallPos, step));
 		if (shape2.getPosition().x == xBallPos && shape2.getPosition().y == yBallPos) {
 			newCirclePos(shape2);
 		}
-
+		
+		// Collision between the 2 balls
+		if (pow((shape.getPosition().x + shape.getRadius()) - (shape2.getPosition().x + shape2.getRadius()), 2) + 
+			pow((shape.getPosition().y + shape.getRadius()) - (shape2.getPosition().y + shape2.getRadius()), 2) <= pow(shape.getRadius() + shape2.getRadius(), 2)) {
+			hits++;
+			sf::String str = "Hits: " + std::to_string(hits);
+			text.setString(str);
+			if (shape.getRadius() >= shape2.getRadius()) { // Eat it
+				sf::Vector2f newPos = sf::Vector2f(rand() % (int)(windowWidth - ceil(shape.getRadius() * 2)), rand() % (int)(windowWidth - ceil(shape.getRadius() * 2)));
+				shape2.setPosition(newPos);
+			}
+		}
+		
 		window.clear();
 		window.draw(shape);
 		window.draw(shape2);
+		window.draw(text);
 		window.display();
 	}
-
 }
