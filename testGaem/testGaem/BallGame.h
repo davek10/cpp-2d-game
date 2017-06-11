@@ -23,6 +23,7 @@ private:
 	int windowWidth;
 	int windowHeight;
 	sf::Text text;
+	sf::Text updateText;
 	sf::Font font;
 	sf::CircleShape shape;
 
@@ -54,5 +55,10 @@ private:
 	float smallestRadius;
 	float enemyBallStart;
 	float startGoal;
+
+	float updateTextHeight1;
+	float updateTextHeight2;
+	int animateTextUpdate;
+	sf::Clock clock;
 };
 

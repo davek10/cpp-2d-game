@@ -3,35 +3,39 @@
 /* 
 BallGame . ReadMe
 
-Goal:	Move around the ball changing color, catch the small blue ball, dont get too small and don't touch a red ball! Highscore gets recorded
-		Small blue (shape2) = runs around and hits are recorded, Progresses the game when hit
-		Catcher balls = smaller and bigger, smaller balls -> increase size of player, bigger: Magenta = decrease size. Red = KILL
+Initializes the balls with radius position and color
+shape = playerball
+Fix cooler color system
+shape2 = runs around and hits are recorded, has goals where it wants to go
+Catcher balls = smaller and bigger = goes from left to right, smaller balls -> increase size of player. Bigger ball = KILL
 
 TODO
-	Sortera fält logiskt
-	Fix bug: Stackoverflow bug on exit (kolla memoryleak)
-	Bättre movement shape2 (typ istället för 1 så step = 0.75-1.25)
-	spara highscore på file (kanske inte funkade pga buggen över) (kod finns men read funka inte och output gav stackoverflow error)
-	Förskjut updateText mer mot mitten
-	Förstora updateText lite
+Sortera fält
+Fix bug: Stackoverflow bug on exit (kolla memoryleak)
+Bättre movement shape2 (typ istället för 1 så step = 0.75-1.25)
+spara highscore på file (kanske inte funkade pga buggen över) (kod finns men read funka inte och output gav stackoverflow error)
+Förskjut updateText mer mot mitten
+updateText på add ball update
 
 Ny funktionalitet:
-	Knappar:
-	- Pause funktion (typ p)
-	- Halverings funktion, typ kasta hälften av sizen (typ h) 
-		Alternativt en funktion man togglar med space för att ändra form
-	- Back knapp (klicka escape) så kommer man till meny (Soure.cpp menu = not made)
-	- Power ups? Faster, invurneble, cant shrink etc. rewards at high hit rates.
-	- Finish levels = Give credits, Credits used in menu (shop or something) to buy upgrades for games.
+Pause funktion (typ p)
+Halverings funktion, typ kasta hälften av sizen (typ h)
+Back knapp (klicka escape) så kommer man till meny
 
-	Animation:
-	- Moving space background
-	- Color shifting player ball
-	- Roliga texture på bollar
+Gör menu i Source.cpp (man väljer spel från den menyn)
 
 
-	Läs om anti alizing och vertical sync
-	- Testa skillnad om man har window.setVerticalSyncEnabled(true); eller window.setFramerateLimit(60); (inte båda)
+
+
+Moving space background
+Color shifting player ball
+	Roliga texture på bollar
+
+Power ups? Faster etc, rewards at high hit rates. 
+	Finish levels etc, buy upgrades blabla
+
+Läs om anti alizing och vertical sync
+	Testa skillnad om man har window.setVerticalSyncEnabled(true); eller window.setFramerateLimit(60); (inte båda)
 
 */
 

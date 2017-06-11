@@ -1,3 +1,4 @@
+#pragma once // Endast innehåll en gång
 #include <SFML/Graphics.hpp>
 #include "BallGame.h"
 using namespace std;
