@@ -1,9 +1,5 @@
 #include "Ball.h"
 
-/*
-	Prevent that no rand % can do it with 0
-*/
-
 Ball::Ball(int windowWidth, int windowHeight)
 {
 	Ball::windowWidth = windowWidth;
@@ -41,26 +37,43 @@ void Ball::resetMove(float radius) {
 	this->resetPosition(0, false);
 }
 
-void Ball::setRadius(int x) // x = shape.getRadius() = Player radius
+void Ball::setRadius(float shapeRadius) // x = shape.getRadius() = Player radius
 {
-	if (isBigger) {
-		shape.setRadius((rand() % (int)(x - smallestRadius) + x));
+	float randNumber;
+	if ((int)(shapeRadius - smallestRadius) == 0) {
+		randNumber = 0;
 	}
 	else {
-		shape.setRadius((rand() % (int)(x - smallestRadius) + smallestRadius));
+		randNumber = rand() % (int)(shapeRadius - smallestRadius);
+	}
+
+	if (isBigger) {
+		shape.setRadius(randNumber + shapeRadius);
+	}
+	else {
+		shape.setRadius(randNumber + smallestRadius);
 	}
 }
 
-void Ball::resetPosition(int rangeOutsideScreen, bool random)
+void Ball::resetPosition(float rangeOutsideScreen, bool random)
 {
-	if (random) {
-		rangeOutsideScreen = rand() % rangeOutsideScreen;
+	if (random && rangeOutsideScreen != 0) {
+		rangeOutsideScreen = rand() % (int) rangeOutsideScreen;
 	}
-	if (leftToRight) {
-		shape.setPosition(-shape.getRadius() - rangeOutsideScreen, rand() % (int)(windowHeight - ceil(shape.getRadius() * 2)));
+
+	float randNumber;
+	if ((int)(windowHeight - ceil(shape.getRadius() * 2)) == 0) {
+		randNumber = 0;
 	}
 	else {
-		shape.setPosition(windowWidth + rangeOutsideScreen, rand() % (int)(windowHeight - ceil(shape.getRadius() * 2)));
+		randNumber = rand() % (int)(windowHeight - ceil(shape.getRadius() * 2));
+	}
+
+	if (leftToRight) {
+		shape.setPosition(-shape.getRadius() - rangeOutsideScreen, randNumber);
+	}
+	else {
+		shape.setPosition(windowWidth + rangeOutsideScreen, randNumber);
 	}
 }
 

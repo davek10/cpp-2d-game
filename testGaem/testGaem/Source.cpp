@@ -1,8 +1,4 @@
 #include <SFML/Graphics.hpp>
-#include <stdio.h>
-#include <stdlib.h>
-#include <io.h>
-#include <iostream>
 #include "BallGame.h"
 using namespace std;
 

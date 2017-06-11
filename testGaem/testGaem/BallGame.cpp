@@ -10,6 +10,8 @@ shape2 = runs around and hits are recorded, has goals where it wants to go
 Catcher balls = smaller and bigger = goes from left to right, increases and decreases size of player ball depending on if they are bigger or smaller
 
 TODO
+Ball array att funka på nåt sätt
+Movement mer dynamisk med left / right
 Testa skillnad om man har window.setVerticalSyncEnabled(true); eller window.setFramerateLimit(60); (inte båda)
 
 Moving space background
@@ -17,12 +19,19 @@ Color shifting player ball
 
 Gör all movement av Ball och collision från en Ball array, för att lättare kunna lägga till fler bollar
 
-Power ups? Faster etc
+When BallArray works : Dynamically create more Balls when hits -> more (start with lower)
+
+Power ups? Faster etc, rewards at high hit rates. 
+	Finish levels etc, buy upgrades blabla
 */
+
+// Ball parameters: int windowWidth, int windowHeight, int playerRadius, int rangeOutsideScreen, sf::Color color, bool isBigger, bool leftToRight
 BallGame::BallGame(sf::RenderWindow * window, int windowWidth, int windowHeight, sf::Font font) 
-	:	smallerBall1(windowWidth, windowHeight, shape.getRadius(), 0, sf::Color::Yellow, false, true),
-		smallerBall2(windowWidth, windowHeight, shape.getRadius(), 30, sf::Color::Yellow, false, true),
-		biggerBall1(windowWidth, windowHeight, shape.getRadius(), 90, sf::Color::Magenta, true, true) 
+	:	smallerBall1(windowWidth, windowHeight, 25.f, 0, sf::Color::Yellow, false, true),
+		smallerBall2(windowWidth, windowHeight, 25.f, 30, sf::Color::Yellow, false, true),
+		biggerBall1(windowWidth, windowHeight, 25.f, 90, sf::Color::Magenta, true, true),
+		smallerBall3(windowWidth, windowHeight, 25.f, 180, sf::Color::Yellow, false, false),
+		biggerBall2(windowWidth, windowHeight, 25.f, 0, sf::Color::Magenta, true, false)
 {
 	this->window = window;
 	this->windowWidth = windowWidth;
@@ -40,32 +49,38 @@ BallGame::BallGame(sf::RenderWindow * window, int windowWidth, int windowHeight,
 
 	float smallestRadius = 10.f;
 	float enemyBallStart = 200.f;
+	float startSize = 25.f;
 	hits = 0;
 
+	std::vector<Ball> ballArray; // Currently not working
+	ballArray.push_back(Ball(windowWidth, windowHeight, shape.getRadius(), 0, sf::Color::Yellow, false, true));
+	ballArray.push_back(Ball(windowWidth, windowHeight, shape.getRadius(), 30, sf::Color::Yellow, false, true));
+	ballArray.push_back(Ball(windowWidth, windowHeight, shape.getRadius(), 90, sf::Color::Magenta, true, true));
+	ballArray.push_back(Ball(windowWidth, windowHeight, shape.getRadius(), 90, sf::Color::Magenta, true, true));
+	ballArray.push_back(Ball(windowWidth, windowHeight, shape.getRadius(), 90, sf::Color::Magenta, true, true));
+	ballArray.push_back(Ball(windowWidth, windowHeight, shape.getRadius(), 90, sf::Color::Magenta, true, true));
+	ballArray.push_back(Ball(windowWidth, windowHeight, shape.getRadius(), 90, sf::Color::Magenta, true, true));
 
-	shape.setRadius(25.f);
-	shape.setPosition(100.f, 100.f);
+	shape.setRadius(startSize);
+	shape.setPosition(100.f, 100.f); // Dens start position e whatever, kanske ska va i mitten
 	shape.setFillColor(sf::Color::Red);
 	shape2.setRadius(smallestRadius);
 	shape.setPosition(enemyBallStart, enemyBallStart);
 	shape.setFillColor(sf::Color::Blue);
-	//smallerBall1(windowWidth, windowHeight, shape.getRadius(), 0, sf::Color::Yellow, false, true);
-	//smallerBall2 = Ball(windowWidth, windowHeight, shape.getRadius(), 30, sf::Color::Yellow, false, true);
-	//biggerBall1 = Ball(windowWidth, windowHeight, shape.getRadius(), 90, sf::Color::Magenta, true, true);
 
-	newCirclePos(shape2); // Goal for shape2
-	// Borde skicka med Ballarray
-	renderingMethod(step, ballSpeed, sizeChange, smallestRadius);
+	newCirclePos(shape2); // Goal for shape
+						  
+	renderingMethod(step, ballSpeed, sizeChange, smallestRadius, ballArray);
 }
 
-void BallGame::renderingMethod(float step, float ballSpeed, float sizeChange, float smallestRadius) {
+void BallGame::renderingMethod(float step, float ballSpeed, float sizeChange, float smallestRadius, std::vector<Ball> ballArray) {
 	while (window->isOpen()) { // Main loop for rendering
 
 		sf::Event event;
 		while (window->pollEvent(event)) {
 			if (event.type == sf::Event::Closed)
 				window->close();
-		}
+		} 
 
 		// Keypresses
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
@@ -130,7 +145,18 @@ void BallGame::renderingMethod(float step, float ballSpeed, float sizeChange, fl
 		}
 		
 		// Movement for dynamic balls
-		// This will be made to work on a Ball[]
+		// This will be made to work on a Ball[] - verkar inte funka med att nå balls så här
+		//std::cout << ballArray.size() << std::endl; //= Currently 7
+/*
+		for(Ball & b : ballArray){ // Ska det vara &? referens right
+			b.setPosition(stepCalcPos(b.getX(), windowWidth + b.getRadius(), ballSpeed), b.getY());
+			if (b.getX() >= windowWidth + b.getRadius()) {
+				b.resetMove(shape.getRadius());
+			}
+		}
+
+*/
+		
 		smallerBall1.setPosition(stepCalcPos(smallerBall1.getX(), windowWidth + smallerBall1.getRadius(), ballSpeed), smallerBall1.getY());
 		if (smallerBall1.getX() >= windowWidth + smallerBall1.getRadius()) {
 			smallerBall1.resetMove(shape.getRadius());
@@ -146,8 +172,35 @@ void BallGame::renderingMethod(float step, float ballSpeed, float sizeChange, fl
 			biggerBall1.resetMove(shape.getRadius());
 		}
 
+		smallerBall3.setPosition(stepCalcPos(smallerBall3.getX(), - smallerBall3.getRadius(), ballSpeed), smallerBall3.getY());
+		if (smallerBall3.getX() <= - smallerBall3.getRadius()) {
+			smallerBall3.resetMove(shape.getRadius());
+		}
+
+		biggerBall2.setPosition(stepCalcPos(biggerBall2.getX(), - biggerBall2.getRadius(), ballSpeed), biggerBall2.getY());
+		if (biggerBall2.getX() <= - biggerBall2.getRadius()) {
+			biggerBall2.resetMove(shape.getRadius());
+		}
+		
 
 		// collision between player and balls to increase and decrease player ball size
+		/*
+		for (Ball & b : ballArray) { // Ska det vara &? referens right
+			if (pow((shape.getPosition().x + shape.getRadius()) - (b.getX() + b.getRadius()), 2) +
+				pow((shape.getPosition().y + shape.getRadius()) - (b.getY() + b.getRadius()), 2) <= pow(shape.getRadius() + b.getRadius(), 2)) {
+				if (shape.getRadius() >= b.getRadius()) { // Eat it
+					shape.setRadius(shape.getRadius() + b.getRadius() / sizeChange);
+					b.resetMove(shape.getRadius());
+				}
+				else if (shape.getRadius() < b.getRadius()) { // Shrink
+					shape.setRadius(shape.getRadius() - b.getRadius() / sizeChange);
+					b.resetMove(shape.getRadius());
+				}
+			}
+		}
+		*/
+		
+	
 		if (pow((shape.getPosition().x + shape.getRadius()) - (smallerBall1.getX() + smallerBall1.getRadius()), 2) +
 			pow((shape.getPosition().y + shape.getRadius()) - (smallerBall1.getY() + smallerBall1.getRadius()), 2) <= pow(shape.getRadius() + smallerBall1.getRadius(), 2)) {
 			if (shape.getRadius() >= smallerBall1.getRadius()) { // Eat it
@@ -183,6 +236,31 @@ void BallGame::renderingMethod(float step, float ballSpeed, float sizeChange, fl
 				biggerBall1.resetMove(shape.getRadius());
 			}
 		}
+
+		if (pow((shape.getPosition().x + shape.getRadius()) - (smallerBall3.getX() + smallerBall3.getRadius()), 2) +
+			pow((shape.getPosition().y + shape.getRadius()) - (smallerBall3.getY() + smallerBall3.getRadius()), 2) <= pow(shape.getRadius() + smallerBall3.getRadius(), 2)) {
+			if (shape.getRadius() >= smallerBall3.getRadius()) { // Eat it
+				shape.setRadius(shape.getRadius() + smallerBall3.getRadius() / sizeChange);
+				smallerBall3.resetMove(shape.getRadius());
+			}
+			else if (shape.getRadius() < smallerBall3.getRadius()) { // Shrink
+				shape.setRadius(shape.getRadius() - smallerBall3.getRadius() / sizeChange);
+				smallerBall3.resetMove(shape.getRadius());
+			}
+		}
+
+		if (pow((shape.getPosition().x + shape.getRadius()) - (biggerBall2.getX() + biggerBall2.getRadius()), 2) +
+			pow((shape.getPosition().y + shape.getRadius()) - (biggerBall2.getY() + biggerBall2.getRadius()), 2) <= pow(shape.getRadius() + biggerBall2.getRadius(), 2)) {
+			if (shape.getRadius() >= biggerBall2.getRadius()) { // Eat it
+				shape.setRadius(shape.getRadius() + biggerBall2.getRadius() / sizeChange);
+				biggerBall2.resetMove(shape.getRadius());
+			}
+			else if (shape.getRadius() < biggerBall2.getRadius()) { // Shrink
+				shape.setRadius(shape.getRadius() - biggerBall2.getRadius() / sizeChange);
+				biggerBall2.resetMove(shape.getRadius());
+			}
+		}
+		
 		
 		window->clear();
 		window->draw(shape);
@@ -190,6 +268,8 @@ void BallGame::renderingMethod(float step, float ballSpeed, float sizeChange, fl
 		window->draw(smallerBall1.getBall());
 		window->draw(smallerBall2.getBall());
 		window->draw(biggerBall1.getBall());
+		window->draw(smallerBall3.getBall());
+		window->draw(biggerBall2.getBall());
 		window->draw(text);
 		window->display();
 	}

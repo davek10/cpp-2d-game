@@ -14,8 +14,8 @@ public:
 	float getY();
 	float getRadius();
 	void resetMove(float radius);
-	void setRadius(int x);
-	void resetPosition(int rangeOutsideScreen, bool random);
+	void setRadius(float shapeRadius);
+	void resetPosition(float rangeOutsideScreen, bool random);
 	void setPosition(float x, float y);
 	void setColor(sf::Color color);
 
