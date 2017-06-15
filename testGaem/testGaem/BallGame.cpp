@@ -15,6 +15,10 @@ TODO
 	Förskjut updateText mer mot mitten
 	Förstora updateText lite
 
+Ny core game mechanic
+	Varje point -> byt färg
+	De andra bollarnas effekt påverkar din färg
+
 Ny funktionalitet:
 	Knappar:
 	- Pause funktion (typ p)
