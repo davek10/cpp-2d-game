@@ -10,7 +10,6 @@ Goal:	Move around the ball changing color, catch the small blue ball, dont get t
 TODO
 	Sortera fält logiskt
 	Fix bug: Stackoverflow bug on exit (kolla memoryleak)
-	Bättre movement shape2 (typ istället för 1 så step = 0.75-1.25)
 	spara highscore på file (kanske inte funkade pga buggen över) (kod finns men read funka inte och output gav stackoverflow error)
 	Förskjut updateText mer mot mitten
 	Förstora updateText lite
@@ -42,6 +41,8 @@ Ny funktionalitet:
 // Ball parameters: int windowWidth, int windowHeight, int playerRadius, int rangeOutsideScreen, sf::Color color, bool isBigger, bool leftToRight
 BallGame::BallGame(sf::RenderWindow * window, int windowWidth, int windowHeight, sf::Font font) 
 {
+	//window->setFramerateLimit(60);
+	window->setVerticalSyncEnabled(true);
 	this->window = window;
 	this->windowWidth = windowWidth;
 	this->windowHeight = windowHeight;
@@ -107,7 +108,7 @@ void BallGame::renderingMethod(float step, float sizeChange, float smallestRadiu
 		}
 		
 		// Movement for the tiny ball
-		shape2.setPosition(stepCalcPos(shape2.getPosition().x, xBallPos, step), stepCalcPos(shape2.getPosition().y, yBallPos, step));
+		shape2.setPosition(stepCalcPos(shape2.getPosition().x, xBallPos, step, true), stepCalcPos(shape2.getPosition().y, yBallPos, step, true));
 		if (shape2.getPosition().x == xBallPos && shape2.getPosition().y == yBallPos) {
 			newCirclePos(shape2);
 		}
@@ -277,7 +278,7 @@ BallGame::~BallGame()
 
 void BallGame::initConstants() {
 	
-	step = 0.05 * 2.f;
+	step = 0.05 * 2.f * 20;	// Sets framerate for entire game - Should be connected to computer
 	sizeChange = 10;
 	smallestRadius = 10.f;
 	enemyBallStart = 200.f;
@@ -404,9 +405,20 @@ void BallGame::newCirclePos(sf::CircleShape shape) {
 	yBallPos = rand() % (int)(windowHeight - ceil(shape.getRadius() * 2));
 }
 
-// Calculates the next coordinate when you are in @currentPosition and you are aiming to go to @goal with @step
+// Help method , DEPRECATED IN THEORY; MOVE USAGE TO OTHER METHOD
 float BallGame::stepCalcPos(float currentPosition, float goal, float step) {
+	return stepCalcPos(currentPosition, goal, step, false);
+}
+
+// Calculates the next coordinate when you are in @currentPosition and you are aiming to go to @goal with @step
+float BallGame::stepCalcPos(float currentPosition, float goal, float step, bool rndDeviation) {
 	step = step * 2;
+
+	if (rndDeviation) {
+		step = step * ((50 + rand() % 100) / 100.0);
+		std::cout << step << std::endl;
+	}
+
 	if (currentPosition < goal) {
 		if ((currentPosition + step) > goal) {
 			return goal;

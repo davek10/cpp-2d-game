@@ -13,6 +13,7 @@ public:
 	void renderingMethod(float step, float sizeChange, float smallestRadius, std::vector<Ball> ballArray);
 	void newCirclePos(sf::CircleShape shape);
 	float stepCalcPos(float currentPosition, float goal, float step);
+	float stepCalcPos(float currentPosition, float goal, float step, bool rndDeviation);
 	bool randomBool(int numberForFalse);
 	void resetBallArray(std::vector<Ball>* ballArray, float ballSpeed);
 	sf::String buildGoalString(int hits, int goalNumber, int levelNumber);
