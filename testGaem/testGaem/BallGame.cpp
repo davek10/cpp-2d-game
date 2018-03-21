@@ -416,7 +416,7 @@ float BallGame::stepCalcPos(float currentPosition, float goal, float step, bool 
 
 	if (rndDeviation) {
 		step = step * ((50 + rand() % 100) / 100.0);
-		std::cout << step << std::endl;
+		//std::cout << step << std::endl;
 	}
 
 	if (currentPosition < goal) {
