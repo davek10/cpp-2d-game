@@ -2,6 +2,8 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <fstream>
+#include <stdio.h>
+#include <stdlib.h>
 
 class MainGame {
 	public:
@@ -19,4 +21,5 @@ class MainGame {
 		sf::Vector2f startPos;
 		float startSize; 
 		float step;
+		sf::Vertex shotLine[];
 };

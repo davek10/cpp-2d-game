@@ -13,7 +13,7 @@ MainGame::MainGame(sf::RenderWindow * window, int windowWidth, int windowHeight,
 
 void MainGame::initStart() {
 	step = 2.f;
-	startSize = 50.f;
+	startSize = 20.f;
 	startPos = sf::Vector2f(windowWidth / 2 - startSize, windowHeight / 2 - startSize);
 	
 	shape.setRadius(50.f);
@@ -82,7 +82,29 @@ void MainGame::renderingMethod() {
 			shape.setPosition(pos.x, newY);
 		}
 
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+		{
+			// left click...
+			// get global mouse position
+			sf::Vector2f playerPos = shape.getPosition();
+			float alignModel = shape.getRadius();		// Wants from middle of the ball, instead of top left edge, can change from gun later.
+			sf::Vector2f align = sf::Vector2f(alignModel, alignModel);
+			sf::Vector2f coord = playerPos + align;
+			//std::cout << coord.x << "," << coord.y << std::endl;
+			sf::Vector2f shotPos = sf::Vector2f(sf::Mouse::getPosition(*window));
+			
+			// TODO: Lägg till nånting för att skotten ska fortsätta efter shotPos
+			float k = (shotPos.y - coord.x) / (shotPos.x - coord.x);
+			std::cout << k << std::endl;
+			//std::cout << shotPos.x << "," << shotPos.y << std::endl;
+			shotLine[0] = sf::Vertex(coord);
+			shotLine[1] = sf::Vertex(shotPos);	
+			shotLine[2] = sf::Vertex();
+		}
+		
+
 		window->clear();
+		window->draw(shotLine, 3, sf::Lines);
 		window->draw(shape);
 		window->draw(text);
 		window->display();
