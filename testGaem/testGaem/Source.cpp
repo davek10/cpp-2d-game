@@ -1,6 +1,7 @@
 #pragma once // Endast innehåll en gång
 #include <SFML/Graphics.hpp>
 #include "BallGame.h"
+#include "MainGame.h"
 using namespace std;
 
 // 640 x 480
@@ -18,9 +19,10 @@ int main() {
 	}
 
 	// Här kan man lägga in nån slags meny där man kan välja vilket spel som ska starta och sen bara skicka med window till den
+	MainGame mg = MainGame(&window, windowWidth, windowHeight, font);
 
 	// Ball Game
-	BallGame bg = BallGame(&window, windowWidth, windowHeight, font);
+	//BallGame bg = BallGame(&window, windowWidth, windowHeight, font);
 }
 	
 
