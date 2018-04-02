@@ -16,6 +16,8 @@ void MainGame::initStart() {
 	startSize = 20.f;
 	startPos = sf::Vector2f(windowWidth / 2 - startSize, windowHeight / 2 - startSize);
 	
+	reload = clock();
+
 	shape.setRadius(50.f);
 	shape.setPosition(startPos);
 	shape.setFillColor(sf::Color::White);
@@ -86,25 +88,44 @@ void MainGame::renderingMethod() {
 		{
 			// left click...
 			// get global mouse position
-			sf::Vector2f playerPos = shape.getPosition();
-			float alignModel = shape.getRadius();		// Wants from middle of the ball, instead of top left edge, can change from gun later.
-			sf::Vector2f align = sf::Vector2f(alignModel, alignModel);
-			sf::Vector2f coord = playerPos + align;
-			//std::cout << coord.x << "," << coord.y << std::endl;
-			sf::Vector2f shotPos = sf::Vector2f(sf::Mouse::getPosition(*window));
+			clock_t dt = clock() - reload;
+			if (dt > 100) {
+				reload = clock();
+				sf::Vector2f playerPos = shape.getPosition();
+				float alignModel = shape.getRadius();		// Wants from middle of the ball, instead of top left edge, can change from gun later.
+				sf::Vector2f align = sf::Vector2f(alignModel, alignModel);
+				sf::Vector2f coord = playerPos + align;
+				//std::cout << coord.x << "," << coord.y << std::endl;
+				sf::Vector2f shotPos = sf::Vector2f(sf::Mouse::getPosition(*window));
+
+				bullets.push_back(Bullet(coord, shotPos, 2.f, 2.5f));
+				std::cout << bullets.size() << std::endl;
+			}
 			
+			/*
 			// TODO: Lägg till nånting för att skotten ska fortsätta efter shotPos
 			float k = (shotPos.y - coord.x) / (shotPos.x - coord.x);
 			std::cout << k << std::endl;
 			//std::cout << shotPos.x << "," << shotPos.y << std::endl;
 			shotLine[0] = sf::Vertex(coord);
-			shotLine[1] = sf::Vertex(shotPos);	
+			shotLine[1] = sf::Vertex(shotPos);
 			shotLine[2] = sf::Vertex();
+			*/
+			
 		}
 		
 
 		window->clear();
 		window->draw(shotLine, 3, sf::Lines);
+
+		for (auto& bullet : bullets) {
+			bullet.update();
+			const sf::CircleShape& sprite = bullet.getSprite();
+			window->draw(sprite);
+			//fix colision check and despawn (delete from vector<Bullet> bullets) can have the window edges for now
+			//prob want a more complex colision check system between certain objects
+		}
+
 		window->draw(shape);
 		window->draw(text);
 		window->display();

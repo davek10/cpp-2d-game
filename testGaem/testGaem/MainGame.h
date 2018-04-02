@@ -4,6 +4,9 @@
 #include <fstream>
 #include <stdio.h>
 #include <stdlib.h>
+#include <vector>
+#include "Bullet.h"
+#include <ctime>
 
 class MainGame {
 	public:
@@ -19,6 +22,8 @@ class MainGame {
 		sf::Font font;
 		sf::CircleShape shape;
 		sf::Vector2f startPos;
+		std::vector<Bullet> bullets;
+		clock_t reload;
 		float startSize; 
 		float step;
 		sf::Vertex shotLine[];
