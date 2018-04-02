@@ -18,7 +18,7 @@ void MainGame::initStart() {
 	
 	reload = clock();
 
-	shape.setRadius(50.f);
+	shape.setRadius(20.f);
 	shape.setPosition(startPos);
 	shape.setFillColor(sf::Color::White);
 
@@ -98,7 +98,7 @@ void MainGame::renderingMethod() {
 				//std::cout << coord.x << "," << coord.y << std::endl;
 				sf::Vector2f shotPos = sf::Vector2f(sf::Mouse::getPosition(*window));
 
-				bullets.push_back(Bullet(coord, shotPos, 2.f, 2.5f));
+				bullets.push_back(NormalBullet(coord, shotPos, 2.f, 2.5f));
 				std::cout << bullets.size() << std::endl;
 			}
 			
